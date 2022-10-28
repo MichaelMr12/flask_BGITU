@@ -1,3 +1,5 @@
+import datetime
+
 from appivt import app
 from flask import render_template, request, flash, get_flashed_messages, session, redirect, url_for, abort
 
@@ -6,6 +8,7 @@ menu = [{'name': 'Главная', 'url': 'index'}, {'name': 'Блюда', 'url'
 
 bd_contact = []
 
+app.permanent_session_lifetime = datetime.timedelta(seconds=120)
 
 @app.route('/')
 @app.route('/index')
