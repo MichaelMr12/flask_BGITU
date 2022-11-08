@@ -1,6 +1,6 @@
 # grup = {1:'ПРи201', 2: 'ПИ-201', 3: 'ИСТ-201' , 4: 'ИВТ-201' }
 
-GROUP = 2
+GROUP = 1
 if  GROUP == 1:
     from apppri import app
 elif GROUP == 2:
@@ -16,6 +16,6 @@ elif GROUP == 4:
 
 
 if __name__ == '__main__':
-    print(*app.config.items(), sep='\n')
-    print('sadf')
+    # print(*app.config.items(), sep='\n')
+    # print('sadf')
     app.run(debug=True)

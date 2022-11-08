@@ -1,5 +1,7 @@
 from apppri import app
-from flask import render_template, request, flash, session, redirect, url_for, abort
+from flask import render_template, request, flash, session, redirect, url_for, abort, g
+
+from apppri.dbpri import connect_db
 
 menu = [{"title": "Начало", "url": "index"},
         {"title": "Главная", "url": "main"},
@@ -8,6 +10,27 @@ menu = [{"title": "Начало", "url": "index"},
         {"title": "Обратная связь", "url": "callback"},
         {"title": "Авторизация", "url": "login"}
         ]
+
+
+def get_db():
+    ''' Соединение с БД '''
+    if not hasattr(g, 'link_db'):
+        g.link_db = connect_db()
+    return g.link_db
+
+
+@app.teardown_appcontext
+def close_db(error):
+    '''Закрытие соединения с БД, если оно было установленно'''
+    if hasattr(g, 'link_db'):
+        g.link_db.close()
+
+
+@app.route('/bd/index')
+def index_bd():
+    #d = get_db()
+
+    return render_template('index_bd.html', title='БД')
 
 
 @app.route('/')
@@ -44,9 +67,10 @@ def callback():
         print(request.form['email'])
     return render_template('callback.html', menu=menu, title="Обратная связь")
 
+
 @app.route('/profile/<username>')
 def profile(username):
-    if 'userlogged' not in session or  session['userlogged'] != username:
+    if 'userlogged' not in session or session['userlogged'] != username:
         abort(401)
     return f"<h1> Привет {username} </h1>"
 
