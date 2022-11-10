@@ -1,5 +1,5 @@
 from apppi import app
-from flask import render_template
+from flask import render_template, url_for
 from random import choice
 
 menu = [{"name": 'Главная', "url": 'index'}, {"name": 'О программе', "url": 'about'}, {"name": 'Помощь', "url": 'help'}]
@@ -9,6 +9,7 @@ menu = [{"name": 'Главная', "url": 'index'}, {"name": 'О програм�
 @app.route('/index')
 def index():
     best_pi = {'username': 'Елизавета'}
+    print(url_for('static', filename='css/styles.css'))
 
     return render_template('index.html', title='2022 Forever', user=best_pi, menu=menu)
 

@@ -3,5 +3,7 @@
 {{ super() }}
 <h1> Добро пожаловать на сайт!! <br>
     {{user.username}}
+    <div>{{ url_for('static', filename='css/styles.css')}} </div>
+
 
     {% endblock %}
