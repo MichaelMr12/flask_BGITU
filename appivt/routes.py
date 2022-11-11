@@ -1,14 +1,42 @@
 import datetime
 
 from appivt import app
-from flask import render_template, request, flash, get_flashed_messages, session, redirect, url_for, abort
+from flask import render_template, request, flash, get_flashed_messages, session, redirect, url_for, abort, g
+
+from appivt.bd_exs import connect_db, FDataBase
 
 menu = [{'name': 'Главная', 'url': 'index'}, {'name': 'Блюда', 'url': 'dishes'}, {'name': 'Помощь', 'url': 'help'},
-        {'name': 'Контакт', 'url': 'contact'}, {'name': 'Авторизация', 'url': 'login'}]
+        {'name': 'Контакт', 'url': 'contact'}, {'name': 'Авторизация', 'url': 'login'},
+        {'name': 'Главная БД', 'url': 'index_db'}]
 
 bd_contact = []
 
 app.permanent_session_lifetime = datetime.timedelta(seconds=120)
+
+
+def get_db():
+    '''соединение с БД, если оно не установленно'''
+    if not hasattr(g, 'link_db'):
+        g.link_db = connect_db()
+    return g.link_db
+
+
+@app.teardown_appcontext
+def close_db(error):
+    '''Закрываем соединение с БД, если оно открыто'''
+    if hasattr(g, 'link_db'):
+        g.link_db.close()
+
+
+
+
+@app.route('/index_db')
+def index_db():
+    db = get_db()
+    database = FDataBase(db)
+    #print(db.getMenu())
+    return render_template('index_db.html', menu=database.getMenu())
+
 
 @app.route('/')
 @app.route('/index')

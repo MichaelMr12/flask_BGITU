@@ -32,9 +32,42 @@ class FDataBase:
             return False
         return True
 
+    def delmenu(self, id=0):
+        try:
+            if id == 0:
+                self.__cur.execute("DELETE from  mainmenu ")
+            else:
+                self.__cur.execute(f"DELETE from  mainmenu WHERE id={id}")
+
+            self.__db.commit()
+        except sqlite3.Error as e:
+            print("Ошибка добавления меню в БД" + str(e))
+            return False
+        return True
+
+    def getMenu(self):
+        sql = '''SELECT * FROM mainmenu'''
+        try:
+            self.__cur.execute(sql)
+            res = list(self.__cur.fetchall())
+            # res = self.__cur.fetchall()
+            # for m in res:
+            #     print(m['url'])
+            #     print(m['title'])
+            # #print(*res)
+            if res:
+                return res
+        except:
+            print("Ошибка чтения из БД")
+        return []
+
 
 if __name__ == '__main__':
     db = connect_db()
     database = FDataBase(db)
-    print(database.addmenu('Главная2', 'index2'))
-    pass
+    database.getMenu()
+    #print(database.addmenu('Главная БД', 'index_db'))
+    # print(database.delmenu(5))
+    # for i in database.getMenu().:
+    #     print(*i)
+    # pass
