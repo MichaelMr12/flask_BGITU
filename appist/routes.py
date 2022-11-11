@@ -1,12 +1,42 @@
 import datetime
+import sqlite3
 
 from appist import app
-from flask import render_template, request, flash, get_flashed_messages, session, redirect, url_for, abort
+from flask import render_template, request, flash, get_flashed_messages, session, redirect, url_for, abort, g
 
 menu = [{'name': 'Главная', 'url': 'index'}, {'name': 'Помощь', 'url': 'help'},
-        {'name': 'Обратная связь', 'url': 'contact'}, {'name': 'Авторизация', 'url': 'login'}]
+        {'name': 'Обратная связь', 'url': 'contact'}, {'name': 'Авторизация', 'url': 'login'},
+        {'name': 'Главная БД', 'url': 'index_db'}]
 
 app.permanent_session_lifetime = datetime.timedelta(seconds=120)
+
+
+def connect_db():
+    conn = sqlite3.connect(app.config['DATABASE'])
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def get_db():
+    '''Соединение с БД, если оно еще не установленнно'''
+    if not hasattr(g, 'link_db'):
+        g.link_db = connect_db()
+    return g.link_db
+
+
+@app.teardown_appcontext
+def close_db(error):
+    '''Закрываем соединение с БД, если оно есть'''
+    if hasattr(g, 'link_db'):
+        g.link_db.close()
+
+
+@app.route('/index_db')
+def index_db():
+    db = get_db()
+
+    return render_template('index_db.html', title='2022 Forever', menu=menu)
+
 
 @app.route('/')
 @app.route('/index')
