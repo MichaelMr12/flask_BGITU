@@ -1,14 +1,15 @@
 from apppri import app
 from flask import render_template, request, flash, session, redirect, url_for, abort, g
 
-from apppri.dbpri import connect_db
+from apppri.dbpri import connect_db, FDataBase
 
 menu = [{"title": "Начало", "url": "index"},
         {"title": "Главная", "url": "main"},
         {"title": "Помощь", "url": "help"},
         {"title": "О приложении", "url": "about"},
         {"title": "Обратная связь", "url": "callback"},
-        {"title": "Авторизация", "url": "login"}
+        {"title": "Авторизация", "url": "login"},
+        {"title": "База данных главная", "url": "/bd/index_bd"}
         ]
 
 
@@ -26,11 +27,12 @@ def close_db(error):
         g.link_db.close()
 
 
-@app.route('/bd/index')
+@app.route('/bd/index_bd')
 def index_bd():
-    #d = get_db()
+    db = get_db()
+    dbase = FDataBase(db)
 
-    return render_template('index_bd.html', title='БД')
+    return render_template('index_bd.html', title='БД', menu = dbase.getMenu())
 
 
 @app.route('/')
