@@ -8,6 +8,7 @@ def connect_db():
     conn.row_factory = sqlite3.Row
     return conn
 
+
 def create_db():
     ''' Вспомогательная функция по созданию БД '''
     db = connect_db()
@@ -18,4 +19,35 @@ def create_db():
     pass
 
 
-print(create_db.__doc__)
+class FDataBase:
+    def __init__(self, db):
+        self.__db = db
+        self.__cur = db.cursor()
+
+    def setMenu(self, title, url):
+        try:
+            self.__cur.execute('INSERT INTO mainmenu VALUES(NULL, ?, ?)', (title, url))
+            self.__db.commit()
+        except sqlite3.Error as e:
+            print('Ошибка добавления в БД', e)
+            return False
+        return True
+
+    def delMenu(self, id=0):
+        try:
+            if id == 0:
+                self.__cur.execute('DELETE FROM mainmenu')
+            else:
+                pass
+            self.__db.commit()
+        except sqlite3.Error as e:
+            print('Ошибка добавления в БД', e)
+            return False
+        return True
+
+
+if __name__ == '__main__':
+    db = connect_db()
+    db = FDataBase(db)
+    #print(db.setMenu('Разработчик', 'about'))
+    print(db.delMenu(5))
