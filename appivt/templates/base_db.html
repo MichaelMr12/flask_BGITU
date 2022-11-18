@@ -16,9 +16,9 @@
             {%-  block mainmenu -%}
                 <ul class="mainmenu">
                        <li>ИВТ</li>
-
+               
                     {% for m in menu -%}
-                    <li>  <a href="{{m.url}}"> {{m.name}} </a> </li>
+                    <li>  <a href="{{url_for(m.url)}}"> {{m.title}} </a> </li>
                     {% endfor -%}
 
                 </ul>

@@ -9,6 +9,7 @@ a {
 	color: #0059b2;
 	text-decoration: none;
 }
+
 a:hover {
 	color: #CC0000;
 	text-decoration: underline;
@@ -74,8 +75,9 @@ font-family: 'MS Roboto';
 .form-contact label {
 	display: inline-block;
 	min-width: 80px;
+
 }
-.form-contact p {margin: 10px 0 10px 0;}
+.form-contact p {margin: 10px 0 10px 30px;}
 .form-contact input[type=submit], textarea {
 	font-size: 16px;
 }

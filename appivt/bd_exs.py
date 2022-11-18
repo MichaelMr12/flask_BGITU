@@ -1,4 +1,7 @@
+import math
 import sqlite3
+import time
+
 from appivt import app
 
 
@@ -61,13 +64,25 @@ class FDataBase:
             print("Ошибка чтения из БД")
         return []
 
+    def addPost(self, title, text):
+        try:
+            tm = math.floor(time.time())
+            self.__cur.execute("INSERT INTO  posts VALUES(NULL, ?, ?, ?)", (title, text, tm))
+            self.__db.commit()
+        except sqlite3.Error as e:
+            print("Ошибка добавления статьи в БД" + str(e))
+            return False
+        return True
+
 
 if __name__ == '__main__':
     db = connect_db()
     database = FDataBase(db)
-    database.getMenu()
+    # database.getMenu()
     #print(database.addmenu('Главная БД', 'index_db'))
     # print(database.delmenu(5))
     # for i in database.getMenu().:
     #     print(*i)
     # pass
+    print(database.addmenu('Добавить статью', 'post_db'))
+    create_db()

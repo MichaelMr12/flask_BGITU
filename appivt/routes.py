@@ -7,7 +7,7 @@ from appivt.bd_exs import connect_db, FDataBase
 
 menu = [{'name': 'Главная', 'url': 'index'}, {'name': 'Блюда', 'url': 'dishes'}, {'name': 'Помощь', 'url': 'help'},
         {'name': 'Контакт', 'url': 'contact'}, {'name': 'Авторизация', 'url': 'login'},
-        {'name': 'Главная БД', 'url': 'index_db'}]
+        {'name': 'Главная БД', 'url': '/db/index_db'}]
 
 bd_contact = []
 
@@ -30,12 +30,29 @@ def close_db(error):
 
 
 
-@app.route('/index_db')
+@app.route('/db/index_db')
 def index_db():
     db = get_db()
     database = FDataBase(db)
     #print(db.getMenu())
     return render_template('index_db.html', menu=database.getMenu())
+
+@app.route('/db/post_db', methods=['POST', 'GET'])
+def post_db():
+    db = get_db()
+    database = FDataBase(db)
+    if request.method == 'POST':
+        if len(request.form['name'])>4 and len(request.form['post'])>10:
+            res = database.addPost(request.form['name'], request.form['post'])
+            if not res:
+                flash('Ошибка добавления статьи', category='error')
+            else:
+                flash('Статья добавлена успешно', category='success')
+        else:
+            flash('Ошибка добавления статьи', category='error')
+    #print(db.getMenu())
+
+    return render_template('post_db.html', menu=database.getMenu(), title='Добавление статей')
 
 
 @app.route('/')
