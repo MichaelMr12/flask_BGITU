@@ -4,9 +4,11 @@ import sqlite3
 from appist import app
 from flask import render_template, request, flash, get_flashed_messages, session, redirect, url_for, abort, g
 
+from appist.bd_ex import FDataBase
+
 menu = [{'name': 'Главная', 'url': 'index'}, {'name': 'Помощь', 'url': 'help'},
         {'name': 'Обратная связь', 'url': 'contact'}, {'name': 'Авторизация', 'url': 'login'},
-        {'name': 'Главная БД', 'url': 'index_db'}]
+        {'name': 'Главная БД', 'url': '/db/index_db'}]
 
 app.permanent_session_lifetime = datetime.timedelta(seconds=120)
 
@@ -31,11 +33,17 @@ def close_db(error):
         g.link_db.close()
 
 
-@app.route('/index_db')
+@app.route('/db/index_db')
 def index_db():
     db = get_db()
+    db = FDataBase(db)
 
-    return render_template('index_db.html', title='2022 Forever', menu=menu)
+    return render_template('index_db.html', title='2022 Forever', menu=db.getMenu())
+
+
+@app.route('/db/feedback')
+def feedback():
+    return render_template('index_db.html', title='2022 Forever', menu=[])
 
 
 @app.route('/')

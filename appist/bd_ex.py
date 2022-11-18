@@ -1,6 +1,6 @@
 import sqlite3
-from appist import app
-from appist.routes import connect_db
+
+
 
 
 def create_db():
@@ -41,9 +41,25 @@ class FDataBase:
             return False
         return True
 
+    def getMenu(self):
+        try:
+            sql = '''SELECT * FROM mainmenu'''
+            self.__cur.execute(sql)
+            res = self.__cur.fetchall()
+            if res: return res
+        except sqlite3.Error as e:
+            print('Ошибка чтения из БД')
 
-print(create_db.__doc__)
-db = connect_db()
-db = FDataBase(db)
-#print(db.addMenu('Главная', 'index'))
-print(db.delMenu(5))
+        return []
+
+if __name__ == '__main__':
+    from appist import app
+    from appist.routes import connect_db
+    print(create_db.__doc__)
+    db = connect_db()
+    db = FDataBase(db)
+    # print(db.addMenu('Главная БД', 'index_db'))
+    # print(db.addMenu('Отзыв', 'feedback'))
+    #print(db.delMenu())
+    for i in db.getMenu():
+        print(i['url'])
