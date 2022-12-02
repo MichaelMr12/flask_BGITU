@@ -41,9 +41,26 @@ def index_db():
     return render_template('index_db.html', title='2022 Forever', menu=db.getMenu())
 
 
-@app.route('/db/feedback')
+@app.route('/db/feedback', methods=["POST", "GET"])
 def feedback():
-    return render_template('index_db.html', title='2022 Forever', menu=[])
+    db = get_db()
+    db = FDataBase(db)
+    if request.method == "POST":
+        if len(request.form['title']) >= 2 and  len(request.form['name']) >= 10 :
+            print(request.form['title'], len(request.form['title']))
+            print(request.form['name'], len(request.form['name']) >= 10)
+
+            res = db.addfeedback(request.form['title'], request.form['name'])
+            print(res)
+            if not res:
+                flash('Ошибка добавления отзыва', category='error')
+            else:
+                flash('Отзыв добавлен', category='success')
+        else:
+            flash('Ошибка добавления отзыва', category='error')
+
+
+    return render_template('feedback.html', title='Добавление отзыва', menu=db.getMenu())
 
 
 @app.route('/')

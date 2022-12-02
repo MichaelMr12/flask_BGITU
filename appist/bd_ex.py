@@ -1,6 +1,6 @@
+import math
 import sqlite3
-
-
+import time
 
 
 def create_db():
@@ -52,14 +52,27 @@ class FDataBase:
 
         return []
 
+    def addfeedback(self, title, text):
+        try:
+            tm = math.floor(time.time())
+            self.__cur.execute("INSERT INTO feedback VALUES(NULL,?, ?, ?)", (title, text, tm))
+            self.__db.commit()
+        except sqlite3.Error as e:
+            print('Ошибка добавления отзыва ' + str(e))
+            return False
+        return True
+
+
+
 if __name__ == '__main__':
     from appist import app
     from appist.routes import connect_db
-    print(create_db.__doc__)
-    db = connect_db()
-    db = FDataBase(db)
-    # print(db.addMenu('Главная БД', 'index_db'))
-    # print(db.addMenu('Отзыв', 'feedback'))
-    #print(db.delMenu())
-    for i in db.getMenu():
-        print(i['url'])
+    # print(create_db.__doc__)
+    # db = connect_db()
+    # db = FDataBase(db)
+    # # print(db.addMenu('Главная БД', 'index_db'))
+    # # print(db.addMenu('Отзыв', 'feedback'))
+    # #print(db.delMenu())
+    # for i in db.getMenu():
+    #     print(i['url'])
+    create_db()
