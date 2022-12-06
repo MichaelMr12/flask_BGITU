@@ -44,17 +44,17 @@ class FDataBase:
             print('Ошибка удаления меню в БД ', + str(e))
             return False
         return True
+
     def getMenu(self, ):
         sql = '''SELECT * FROM mainmenu '''
         try:
             self.__cur.execute(sql)
             res = self.__cur.fetchall()
             if res: return res
-        except :
-            print('Ошибка чтения из БД ',)
+        except:
+            print('Ошибка чтения из БД ', )
             return False
         return []
-
 
 
 if __name__ == '__main__':
@@ -65,8 +65,8 @@ if __name__ == '__main__':
         print(k['id'], k['url'])
         # for i, j in k:
         #     print(i, j)
-    #print(db.addMenu('Главная', 'index_bd'))
-    #print(db.addMenu('Добавить пост', 'add_post'))
-    #print(db.delMenu())
+    # print(db.addMenu('Главная', 'index_bd'))
+    # print(db.addMenu('Добавить пост', 'add_post'))
+    # print(db.delMenu())
     # print(*sys.path, sep='\n')
     print('2')

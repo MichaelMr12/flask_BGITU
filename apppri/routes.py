@@ -9,7 +9,7 @@ menu = [{"title": "Начало", "url": "index"},
         {"title": "О приложении", "url": "about"},
         {"title": "Обратная связь", "url": "callback"},
         {"title": "Авторизация", "url": "login"},
-        {"title": "База данных главная", "url": "/bd/index_bd"}
+        {"title": "База данных главная", "url": "/bd/index_db"}
         ]
 
 
@@ -27,12 +27,12 @@ def close_db(error):
         g.link_db.close()
 
 
-@app.route('/bd/index_bd')
-def index_bd():
+@app.route('/bd/index_db')
+def index_db():
     db = get_db()
     dbase = FDataBase(db)
 
-    return render_template('index_bd.html', title='БД', menu = dbase.getMenu())
+    return render_template('index_db.html', title='БД', menu=dbase.getMenu())
 
 
 @app.route('/')
@@ -68,6 +68,24 @@ def callback():
         print(request.form)
         print(request.form['email'])
     return render_template('callback.html', menu=menu, title="Обратная связь")
+
+
+@app.route('/addpost', methods=["POST", "GET"])
+def callback():
+    db = get_db()
+    dbase = FDataBase(db)
+    if request.method == 'POST':
+        if len(request.form['name']) > 2 and len(request.form['post']) > 4:
+            res = dbase.appPost(request.form['name'], request.form['url'], request.form['post'])
+            if not res:
+                flash('  Ошибка добавления', category='error')
+            else:
+
+                flash('Cтатья добавлена', category='success')
+        else:
+            flash('  Ошибка добавления', category='error')
+
+    return render_template('addpost.html', menu=dbase.getMenu(), title="Добавить статью")
 
 
 @app.route('/profile/<username>')
