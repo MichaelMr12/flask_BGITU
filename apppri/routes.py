@@ -9,7 +9,7 @@ menu = [{"title": "Начало", "url": "index"},
         {"title": "О приложении", "url": "about"},
         {"title": "Обратная связь", "url": "callback"},
         {"title": "Авторизация", "url": "login"},
-        {"title": "База данных главная", "url": "/bd/index_db"}
+        {"title": "База данных главная", "url": "/db/index_db"}
         ]
 
 
@@ -27,7 +27,7 @@ def close_db(error):
         g.link_db.close()
 
 
-@app.route('/bd/index_db')
+@app.route('/db/index_db')
 def index_db():
     db = get_db()
     dbase = FDataBase(db)
@@ -70,13 +70,13 @@ def callback():
     return render_template('callback.html', menu=menu, title="Обратная связь")
 
 
-@app.route('/addpost', methods=["POST", "GET"])
-def callback():
+@app.route('/db/addpost', methods=["POST", "GET"])
+def addPost():
     db = get_db()
     dbase = FDataBase(db)
     if request.method == 'POST':
         if len(request.form['name']) > 2 and len(request.form['post']) > 4:
-            res = dbase.appPost(request.form['name'], request.form['url'], request.form['post'])
+            res = dbase.addPost(request.form['name'], request.form['url'], request.form['post'])
             if not res:
                 flash('  Ошибка добавления', category='error')
             else:

@@ -1,6 +1,7 @@
+import math
 import sqlite3
 import sys
-
+import time
 from apppri import app
 
 
@@ -56,17 +57,33 @@ class FDataBase:
             return False
         return []
 
+    def addPost(self, name, url, post):
+        try:
+            self.__cur.execute("SELECT COUNT() as 'count' FROM posts WHERE url LIKE ?", (url,))
+            res = self.__cur.fetchone()
+            if res['count'] > 0:
+                print("Статья с таким url существует")
+                return False
+            tm = math.floor(time.time())
+            self.__cur.execute('INSERT INTO posts VALUES (NULL, ?,?,?,?)', (name, post, url, tm))
+            self.__db.commit()
+        except sqlite3.Error as e:
+            print('Ошибка добавления статьи в БД ' + str(e))
+            return False
+        return True
+
 
 if __name__ == '__main__':
-    db = connect_db()
-    db = FDataBase(db)
-    print('1')
-    for k in db.getMenu():
-        print(k['id'], k['url'])
-        # for i, j in k:
-        #     print(i, j)
-    # print(db.addMenu('Главная', 'index_bd'))
+    # db = connect_db()
+    # db = FDataBase(db)
+    # print('1')
+    # for k in db.getMenu():
+    #     print(k['id'], k['url'])
+    #     # for i, j in k:
+    #     #     print(i, j)
+    # print(db.addMenu('Главная', 'index_db'))
     # print(db.addMenu('Добавить пост', 'add_post'))
     # print(db.delMenu())
     # print(*sys.path, sep='\n')
+    create_db()
     print('2')
