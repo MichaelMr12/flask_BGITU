@@ -49,5 +49,7 @@ class FDataBase:
 if __name__ == '__main__':
     db = connect_db()
     db = FDataBase(db)
-    #print(db.setMenu('Разработчик', 'about'))
-    print(db.delMenu(5))
+    print(db.setMenu('Главная БД', 'index_db'))
+    print(db.setMenu('Добавить статью', 'posts'))
+    # print(db.delMenu(5))
+    # create_db()
