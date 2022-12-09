@@ -1,0 +1,5 @@
+{% extends 'base_bd.html' %}
+{% block content %}
+ {{ super() }}
+{{post | safe}}
+{% endblock %}

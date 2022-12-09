@@ -46,7 +46,7 @@ def feedback():
     db = get_db()
     db = FDataBase(db)
     if request.method == "POST":
-        if len(request.form['title']) >= 2 and  len(request.form['name']) >= 10 :
+        if len(request.form['title']) >= 2 and len(request.form['name']) >= 10:
             print(request.form['title'], len(request.form['title']))
             print(request.form['name'], len(request.form['name']) >= 10)
 
@@ -59,15 +59,15 @@ def feedback():
         else:
             flash('Ошибка добавления отзыва', category='error')
 
-
     return render_template('feedback.html', title='Добавление отзыва', menu=db.getMenu())
+
 
 @app.route('/db/add-post', methods=["POST", "GET"])
 def add_post():
     db = get_db()
     db = FDataBase(db)
     if request.method == "POST":
-        if len(request.form['title']) >= 2 and  len(request.form['name']) >= 10 :
+        if len(request.form['title']) >= 2 and len(request.form['name']) >= 10:
             # print(request.form['title'], len(request.form['title']))
             # print(request.form['name'], len(request.form['name']) >= 10)
             res = db.addPost(request.form['title'], request.form['name'], request.form['url'])
@@ -78,8 +78,16 @@ def add_post():
         else:
             flash('Ошибка добавления статья', category='error')
 
-
     return render_template('addpost.html', title='Добавление статьи', menu=db.getMenu())
+
+
+@app.route('/db/posts/<alias>')
+def show_post(alias):
+    db = get_db()
+    db = FDataBase(db)
+    title, post = db.getPost(alias)
+    return render_template('showpost.html', title=title, post=post, menu=db.getMenu())
+
 
 @app.route('/')
 @app.route('/index')

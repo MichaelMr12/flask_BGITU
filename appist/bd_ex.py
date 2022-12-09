@@ -77,6 +77,17 @@ class FDataBase:
             return False
         return True
 
+    def getPost(self, alias):
+        try:
+            sql = "SELECT title, text FROM posts WHERE url LIKE ? LIMIT 1"
+            self.__cur.execute(sql, (alias,))
+            res = self.__cur.fetchone()
+            if res: return res
+        except sqlite3.Error as e:
+            print('Ошибка чтения  статьи из БД' + str(e))
+
+        return (False, False)
+
 
 if __name__ == '__main__':
     from appist import app
@@ -87,8 +98,8 @@ if __name__ == '__main__':
     db = FDataBase(db)
     # # print(db.addMenu('Главная БД', 'index_db'))
     # # print(db.addMenu('Отзыв', 'feedback'))
-    #print(db.delMenu(13))
+    # print(db.delMenu(13))
     # for i in db.getMenu():
     #     print(i['url'])
     # print(db.addMenu('Добавить статью', 'add_post'))
-    #create_db()
+    # create_db()
