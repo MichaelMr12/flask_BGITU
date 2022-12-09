@@ -62,17 +62,33 @@ class FDataBase:
             return False
         return True
 
+    def addPost(self, title, text, url):
+        try:
+            self.__cur.execute("SELECT COUNT() as 'count' FROM posts WHERE url LIKE ?", (url,))
+            res = self.__cur.fetchone()
+            if res['count'] > 0:
+                print('Статья с таким url уже есть!')
+                return False
+            tm = math.floor(time.time())
+            self.__cur.execute("INSERT INTO posts VALUES(NULL,?, ?, ?, ?)", (title, text, url, tm))
+            self.__db.commit()
+        except sqlite3.Error as e:
+            print('Ошибка добавления стать в БД ' + str(e))
+            return False
+        return True
 
 
 if __name__ == '__main__':
     from appist import app
     from appist.routes import connect_db
+
     # print(create_db.__doc__)
-    # db = connect_db()
-    # db = FDataBase(db)
+    db = connect_db()
+    db = FDataBase(db)
     # # print(db.addMenu('Главная БД', 'index_db'))
     # # print(db.addMenu('Отзыв', 'feedback'))
-    # #print(db.delMenu())
+    #print(db.delMenu(13))
     # for i in db.getMenu():
     #     print(i['url'])
-    create_db()
+    # print(db.addMenu('Добавить статью', 'add_post'))
+    #create_db()
