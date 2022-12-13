@@ -70,8 +70,8 @@ def callback():
     return render_template('callback.html', menu=menu, title="Обратная связь")
 
 
-@app.route('/db/addpost', methods=["POST", "GET"])
-def addPost():
+@app.route('/db/add_post', methods=["POST", "GET"])
+def add_post():
     db = get_db()
     dbase = FDataBase(db)
     if request.method == 'POST':
@@ -84,7 +84,7 @@ def addPost():
                 flash('Cтатья добавлена', category='success')
         else:
             flash('  Ошибка добавления', category='error')
-
+    print(dbase.getMenu()[1]['url'])
     return render_template('addpost.html', menu=dbase.getMenu(), title="Добавить статью")
 
 

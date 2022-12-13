@@ -1,10 +1,10 @@
-{% extends 'base.html' %}
+{% extends 'base_db.html' %}
 
 {% block content %}
 {{ super() }}
 
 
-<form action="{{url_for('addPost')}}" method="post" class="form-contact">
+<form action="{{url_for('add_post')}}" method="post" class="form-contact">
     {% for cat, msg in get_flashed_messages(True) %}
     <div class="flash {{ cat }}"> {{msg}}</div>
     {% endfor %}
