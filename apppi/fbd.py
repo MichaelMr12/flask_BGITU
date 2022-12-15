@@ -1,12 +1,9 @@
 import sqlite3
 
-from apppi import app
 
 
-def connect_db():
-    conn = sqlite3.connect(app.config['DATABASE'])
-    conn.row_factory = sqlite3.Row
-    return conn
+
+
 
 
 def create_db():
@@ -47,9 +44,14 @@ class FDataBase:
 
 
 if __name__ == '__main__':
+    from apppi import app, connect_db
     db = connect_db()
     db = FDataBase(db)
+
+    print(db.setMenu('Главная', 'index'))
+    print(db.setMenu('О программе', 'about'))
+    print(db.setMenu('Помощь', 'help'))
     print(db.setMenu('Главная БД', 'index_db'))
     print(db.setMenu('Добавить статью', 'posts'))
-    # print(db.delMenu(5))
+    # print(db.delMenu())
     # create_db()

@@ -1,9 +1,22 @@
-from apppi import app
-from flask import render_template, url_for
+from apppi import app, connect_db
+from flask import render_template, url_for, g
 from random import choice
 
 menu = [{"name": 'Главная', "url": 'index'}, {"name": 'О программе', "url": 'about'}, {"name": 'Помощь', "url": 'help'}]
 
+def get_db():
+    '''Установление соединения с БД'''
+    if not hasattr(g, 'link_db'):
+        g.link_db = connect_db()
+    return g.link_db
+
+@app.teardown_appcontext
+def close_db(error):
+    'Разрыв соединения с БД'
+    print(g.__dict__)
+    if hasattr(g, 'link_db'):
+        g.link_db.close()
+    print(g.__dict__)
 
 @app.route('/')
 @app.route('/index')
@@ -23,4 +36,10 @@ def help():
 @app.route('/about')
 def about():
     return render_template('about.html', menu=menu)
+
+@app.route('/index_db')
+
+def index_db():
+    db = get_db()
+    return render_template('index_db.html', menu=[])
 
